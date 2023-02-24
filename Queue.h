@@ -6,9 +6,17 @@ typedef struct {
 }Queue;
 
 
-void enqueue_struct(Queue* q, int x){
-  Node *new_node=(Node*) malloc(sizeof(Node));
+void enqueue_struct(Queue* q, int x, int y){
+  NodePtr new_node=(NodePtr) malloc(sizeof(Node));
 if(new_node){ 
+  new_node -> order_number = x;
+  new_node -> qty = y;
+  new_node -> nextPtr = NULL;
+
+  if(!(q->headPtr)) q->headPtr = new_node;
+  else q->tailPtr->nextPtr = new_node;
+  q->tailPtr = new_node;
+  q->size++;
   /*Finish enqueue */
  }
 }
@@ -16,12 +24,37 @@ if(new_node){
 
 int dequeue_struct(Queue *q){
    NodePtr t=q->headPtr;
-   if(t){
-   int value= t->data;
-       /*Finish dequeue */
-   return value;
+   int price;
+
+   if(q->size>0){
+     switch (t->order_number)
+     {
+     case 1: printf("Ramen\n");
+      price = 100;
+       break;
+     case 2: printf("Somtum\n");
+      price = 20;
+       break;
+     case 3: printf("KFC\n");
+      price = 50;
+       break;
+    default: printf("No food\n");
+      price = 0;
+       break;
+     }
    }
-   printf("Empty queue");
-   return 0;
+
+  if(t){
+    int value = price * q-> headPtr -> qty;
+    q -> headPtr = q -> headPtr -> nextPtr;
+    if(!(q->headPtr)) q->tailPtr = NULL;
+    free(t);
+    q->size -= 1;
+    return value;
+  }
+  printf("The queue is empty\n");
+  return 0; 
 }
+
+
 
